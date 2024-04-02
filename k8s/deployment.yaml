@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: docker-app
+  namespace: default
+  labels:
+    app: docker-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: docker-app
+  template:
+    metadata:
+      labels:
+        app: docker-app
+    spec:
+      containers:
+      - name: docker-app
+        image: madhavlearner/dockerapp:0.0.1
+        imagePullPolicy: IfNotPresent
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: docker-app-service
+  namespace: default
+  labels:
+    app: docker-app
+spec:
+  selector:
+    app: docker-app
+  type: LoadBalancer
+  ports:
+  - port: 8080
+    targetPort: 8080
+    protocol: TCP
+
